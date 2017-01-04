@@ -8,6 +8,7 @@
     <licenseUrl>http://opensource.org/licenses/BSD-3-Clause</licenseUrl>
     <projectUrl>https://github.com/pablissimo/nrconfig</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <developmentDependency>true</developmentDependency>
     <description>Generates custom instrumentation configuration files for New Relic - see the project page for more information. Mark up your assemblies, classes and methods to get fine-grained control using the [Instrument] attribute.</description>
     <releaseNotes>Added support for automatically discovering NServiceBus IHandleMessage implementations.</releaseNotes>
     <copyright>Copyright 2013 Paul O'Neill</copyright>
