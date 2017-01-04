@@ -127,6 +127,7 @@
     <Compile Include="Infrastructure\IParameterDetails.cs" />
     <Compile Include="Infrastructure\IPropertyDetails.cs" />
     <Compile Include="Infrastructure\ITypeDetails.cs" />
+    <Compile Include="Infrastructure\NServiceBus\NServiceBusInstrumentationDiscoverer.cs" />
     <Compile Include="Infrastructure\Reflected\Extensions\AttributeProviderExtensions.cs" />
     <Compile Include="Infrastructure\Reflected\ReflectedAssemblyDetails.cs" />
     <Compile Include="Infrastructure\Reflected\ReflectedConstructorDetails.cs" />

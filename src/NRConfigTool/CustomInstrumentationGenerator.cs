@@ -11,6 +11,7 @@ using NRConfigManager.Rendering;
 using log4net;
 using NRConfigManager.Infrastructure.Cci;
 using NRConfigManager.Infrastructure.Reflected;
+using NRConfigManager.Infrastructure.NServiceBus;
 
 namespace NRConfigTool
 {
@@ -58,6 +59,11 @@ namespace NRConfigTool
         public bool UseReflectionBasedDiscovery { get; set; }
 
         /// <summary>
+        /// Gets or sets whether NServiceBus handler discovery should be performed.
+        /// </summary>
+        public bool UseNServiceBusHandlerDiscovery { get; set; }
+
+        /// <summary>
         /// Gets or sets a delegate that filters whether a type found in an assembly should be considered for
         /// instrumentation.
         /// </summary>
@@ -91,6 +97,11 @@ namespace NRConfigTool
                 {
                     _logger.Info("Using legacy reflection-based discovery on request");
                     discoverer = new ReflectedInstrumentationDiscoverer();
+                }
+                else if (this.UseNServiceBusHandlerDiscovery)
+                {
+                    _logger.Info("Using NServiceBus handler discovery on request");
+                    discoverer = new NServiceBusInstrumentationDiscoverer();
                 }
                 else
                 {

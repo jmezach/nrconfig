@@ -142,6 +142,7 @@ namespace NewRelicConfigBuilder
                 }
 
                 generator.UseReflectionBasedDiscovery = args.LegacyMode;
+                generator.UseNServiceBusHandlerDiscovery = args.NServiceBusMode;
                 generator.ContinueOnFailure = args.ContinueOnFailure;
                 generator.IncludeCompilerGeneratedCode = args.IncludeCompilerGeneratedCode ?? false;
 

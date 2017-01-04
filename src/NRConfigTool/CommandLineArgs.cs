@@ -73,6 +73,10 @@ namespace NewRelicConfigBuilder
             + "in any processed assembly to be present in the GAC or next to the processed assembly")]
         public bool LegacyMode { get; set; }
 
+        [CmdLineArg(Alias = "n", Required = false)]
+        [Description("Specifies that NServiceBus handlers discovery should be used.")]
+        public bool NServiceBusMode { get; set; }
+
         public bool ForceIfNotMarkedUpValid
         {
             get

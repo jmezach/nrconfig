@@ -53,6 +53,7 @@ namespace NRConfigTool
 
                 var generator = new CustomInstrumentationGenerator(inputFiles, outputFile);
                 generator.ContinueOnFailure = true;
+                generator.UseNServiceBusHandlerDiscovery = true;
 
                 try
                 {
