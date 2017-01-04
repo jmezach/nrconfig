@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>NRConfig.MSBuild</id>
-    <version>1.6.0.0</version>
+    <version>1.6.1</version>
     <authors>Pablissimo</authors>
     <owners>Pablissimo</owners>
     <licenseUrl>http://opensource.org/licenses/BSD-3-Clause</licenseUrl>
@@ -15,8 +15,8 @@
     <tags>NewRelic New Relic Configuration Tool</tags>
 
     <dependencies>
-      <dependency id="NRConfig.Tool" version="[1.6.0.0]" />
-      <dependency id="NRConfig.Library" version="[1.6.0.0]" />
+      <dependency id="NRConfig.Tool" version="[1.6.0]" />
+      <dependency id="NRConfig.Library" version="[1.6.0]" />
     </dependencies>
   </metadata>
 </package>
