@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
+﻿using Microsoft.Cci;
 using NRConfig;
-using System.Reflection;
-using NRConfigManager.Infrastructure.Reflected;
+using NRConfigManager.Infrastructure.Cci;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NRConfigManager.Infrastructure.NServiceBus
 {
@@ -11,22 +11,31 @@ namespace NRConfigManager.Infrastructure.NServiceBus
     {
         public override IEnumerable<InstrumentationTarget> GetInstrumentationSet(string assemblyPath, InstrumentAttribute context, Predicate<ITypeDetails> typeFilter)
         {
-            var assembly = Assembly.LoadFrom(assemblyPath);
-            var types = assembly.GetTypes()
-                                .Where(type => type.IsClass && type.GetInterfaces().Any(@interface => @interface.FullName.StartsWith("NServiceBus.IHandleMessages")))
-                                .Where(type => !type.BaseType.FullName.StartsWith("NServiceBus.Saga.Saga"));
+            var host = new PeReader.DefaultHost();
+            var assembly = host.LoadUnitFrom(assemblyPath) as IAssembly;
+
+            if (assembly == null || assembly == Dummy.Assembly)
+            {
+                throw new InvalidOperationException(string.Format("Failed to load assembly from '{0}'", assemblyPath));
+            }
+
+            var types = assembly.GetAllTypes()
+                                .Where(type => type.IsClass)
+                                .Where(type => type.Interfaces.Any(@interface => TypeHelper.GetTypeName(@interface).StartsWith("NServiceBus.IHandleMessages")) ||
+                                               (type.BaseClasses.FirstOrDefault()?.ResolvedType.Interfaces.Any(@interface => TypeHelper.GetTypeName(@interface).StartsWith("NServiceBus.IHandleMessages"))).GetValueOrDefault())
+                                .Where(type => !TypeHelper.GetTypeName(type.BaseClasses.FirstOrDefault()).StartsWith("NServiceBus.Saga.Saga"));
 
             var handlers = types.Select(type => new
             {
                 HandlerType = type,
-                HandleMethods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(method => method.Name.Equals("Handle"))
+                HandleMethods = type.Methods.Where(method => method.Name.Value.Equals("Handle"))
             });
 
             var result = from handler in handlers
                          from handlerMethod in handler.HandleMethods
                          select new InstrumentationTarget(
-                             new ReflectedMethodDetails(handlerMethod),
-                             handler.HandlerType.Name,
+                             new CciMethodDetails(handlerMethod),
+                             handler.HandlerType.Name.Value,
                              "NewRelic.Agent.Core.Tracer.Factories.BackgroundThreadTracerFactory",
                              null,
                              Metric.Scoped
